@@ -20,13 +20,15 @@ class UmkmController extends BaseController
     public function index()
     {
         $data['umkm'] = $this->umkmModel
+            ->select('umkm.*, kategori_usaha.nama_kategori as nama_kategori') // ✅ kolom sesuai tabel
             ->join('kategori_usaha', 'kategori_usaha.id = umkm.kategori_id', 'left')
             ->findAll();
 
-        $data['kategori'] = $this->kategoriModel->findAll(); // ⬅️ Ini penting ditambahkan
+        $data['kategori'] = $this->kategoriModel->findAll();
 
         return view('admin/kelolaumkm', $data);
     }
+
 
 
     // 📄 Form Tambah / Edit UMKM

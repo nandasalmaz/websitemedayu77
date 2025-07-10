@@ -100,9 +100,11 @@
             <h2 class="mb-3 fs-6 fw-semibold text-[color:#2E7D32]">Daftar UMKM</h2>
             <?php if (!empty($umkm)): ?>
                 <div class="row g-3">
-                    <?php foreach ($umkm as $u): ?>
-                        <?= view('components/card', ['umkm' => $u]) ?>
-                    <?php endforeach ?>
+                    <?php if (!empty($umkm)): ?>
+                        <?= view('components/card', ['semua_umkm' => $umkm]) ?>
+                    <?php else: ?>
+                        <div class="alert alert-warning text-center small py-2">Belum ada data UMKM ditemukan.</div>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
                 <div class="alert alert-warning text-center small py-2">Belum ada data UMKM ditemukan.</div>

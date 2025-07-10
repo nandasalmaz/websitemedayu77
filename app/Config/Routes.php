@@ -9,6 +9,8 @@ use CodeIgniter\Router\RouteCollection;
 // Halaman Publik
 $routes->get('/', 'LandingController::landing');
 $routes->get('umkm', 'LandingController::umkm');
+$routes->get('umkm/detail/(:num)', 'LandingController::detail_umkm/$1');
+
 
 // Autentikasi
 $routes->get('login', 'AuthController::showLogin');

@@ -1,4 +1,9 @@
 <!-- app/Views/admin/kelolaumkm.php -->
+<?php
+$search = $search ?? '';
+$filterKategori = $filterKategori ?? '';
+$filterRw = $filterRw ?? '';
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -23,7 +28,7 @@
     </script>
 </head>
 
-<body class="bg-lightgreen text-darkgreen font-sans">
+<body class="bg-lightgreen text-darkgreen font-sans text-[14px]">
     <div class="flex w-full">
         <!-- Sidebar -->
         <div class="sticky top-0 h-screen w-[215px] shrink-0">
@@ -31,17 +36,15 @@
         </div>
 
         <!-- Main Content -->
-        <!-- Main Content -->
-        <main class="flex-grow px-2 py-5 space-y-5 overflow-x-auto">
-
+        <main class="flex-grow px-6 py-6 space-y-6 overflow-x-auto">
             <!-- Header -->
             <div>
-                <h1 class="text-2xl font-bold text-primary mb-1">Kelola UMKM</h1>
-                <p class="text-xs text-gray-700">Lihat dan kelola data UMKM yang sudah terdaftar.</p>
+                <h1 class="text-xl font-semibold text-primary mb-1">Kelola UMKM</h1>
+                <p class="text-sm text-gray-600">Kelola data UMKM yang sudah terdaftar di wilayah Medokan Ayu.</p>
             </div>
 
             <!-- Tombol & Filter -->
-            <div class="flex flex-wrap justify-between items-center gap-3">
+            <div class="flex flex-wrap justify-between items-center gap-4">
                 <a href="<?= base_url('admin/umkm/tambah') ?>"
                     class="inline-flex items-center gap-2 bg-primary hover:bg-green-700 text-white px-3 py-1.5 rounded shadow text-sm">
                     <i class="bi bi-plus-circle-fill text-base"></i>
@@ -49,20 +52,27 @@
                 </a>
 
                 <form action="" method="get" class="flex flex-wrap items-center gap-2">
-                    <input type="text" name="search" placeholder="Cari Nama / NIK"
+                    <input type="text" name="search" placeholder="Cari Nama / NIK" value="<?= esc($search) ?>"
                         class="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-primary focus:outline-none" />
+
                     <select name="kategori" class="px-3 py-1.5 border border-gray-300 rounded-md text-sm">
                         <option value="">Semua Kategori</option>
                         <?php foreach ($kategori as $k): ?>
-                            <option value="<?= $k['id'] ?>"><?= esc($k['nama_kategori']) ?></option>
+                            <option value="<?= $k['id'] ?>" <?= ($filterKategori == $k['id']) ? 'selected' : '' ?>>
+                                <?= esc($k['nama_kategori']) ?>
+                            </option>
                         <?php endforeach ?>
                     </select>
+
                     <select name="rw" class="px-3 py-1.5 border border-gray-300 rounded-md text-sm">
                         <option value="">Semua RW</option>
                         <?php foreach (range(1, 20) as $rw): ?>
-                            <option value="<?= $rw ?>">RW <?= $rw ?></option>
+                            <option value="<?= $rw ?>" <?= ($filterRw == $rw) ? 'selected' : '' ?>>
+                                RW <?= $rw ?>
+                            </option>
                         <?php endforeach ?>
                     </select>
+
                     <button type="submit"
                         class="px-3 py-1.5 bg-primary text-white text-sm rounded hover:bg-green-700 transition">
                         <i class="bi bi-search mr-1"></i> Cari
@@ -79,24 +89,24 @@
 
             <!-- Tabel -->
             <div class="overflow-x-auto rounded-xl shadow bg-white">
-                <table class="min-w-full text-sm table-auto">
-                    <thead class="bg-softgreen text-darkgreen">
+                <table class="min-w-full text-sm table-auto border-collapse">
+                    <thead class="bg-softgreen text-darkgreen uppercase text-[13px] tracking-wide">
                         <tr>
-                            <th class="px-3 py-2">Nama</th>
-                            <th class="px-3 py-2">Jenis</th>
-                            <th class="px-3 py-2">Kategori</th>
-                            <th class="px-3 py-2">NIB/SKU</th>
-                            <th class="px-3 py-2">NIK</th>
-                            <th class="px-3 py-2">Alamat</th>
-                            <th class="px-3 py-2">Keterangan</th>
-                            <th class="px-3 py-2">Logo</th>
-                            <th class="px-3 py-2">Gambar</th>
-                            <th class="px-3 py-2">Aksi</th>
+                            <th class="px-3 py-2 text-left">Nama</th>
+                            <th class="px-3 py-2 text-left">Jenis</th>
+                            <th class="px-3 py-2 text-left">Kategori</th>
+                            <th class="px-3 py-2 text-left">NIB/SKU</th>
+                            <th class="px-3 py-2 text-left">NIK</th>
+                            <th class="px-3 py-2 text-left">Alamat</th>
+                            <th class="px-3 py-2 text-left">Keterangan</th>
+                            <th class="px-3 py-2 text-left">Logo</th>
+                            <th class="px-3 py-2 text-left">Gambar</th>
+                            <th class="px-3 py-2 text-left">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-gray-800">
                         <?php foreach ($umkm as $row): ?>
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:bg-gray-50 transition duration-150">
                                 <td class="px-3 py-2"><?= esc($row['nama']) ?></td>
                                 <td class="px-3 py-2"><?= esc($row['jenis_usaha']) ?></td>
                                 <td class="px-3 py-2"><?= esc($row['nama_kategori']) ?></td>
@@ -129,6 +139,7 @@
                                             class="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1">
                                             <i class="bi bi-pencil-square"></i> Edit
                                         </a>
+
                                         <form action="<?= base_url('admin/umkm/hapus/' . $row['id']) ?>" method="post"
                                             onsubmit="return confirm('Yakin ingin menghapus UMKM ini?')">
                                             <?= csrf_field() ?>
@@ -145,7 +156,6 @@
                 </table>
             </div>
         </main>
-
     </div>
 </body>
 

@@ -29,19 +29,15 @@ class AdminController extends BaseController
     {
         $umkmModel = new UmkmModel();
         $kategoriModel = new KategoriModel();
-        
 
-        // Ambil parameter dari query string
         $search = $this->request->getGet('search');
         $filterKategori = $this->request->getGet('kategori');
         $filterRw = $this->request->getGet('rw');
 
-        // Query Builder
         $builder = $umkmModel
             ->select('umkm.*, kategori_usaha.nama_kategori')
             ->join('kategori_usaha', 'kategori_usaha.id = umkm.kategori_id', 'left');
 
-        // Filter
         if ($search) {
             $builder->groupStart()
                 ->like('umkm.nama', $search)
@@ -57,12 +53,16 @@ class AdminController extends BaseController
             $builder->where('umkm.rw', $filterRw);
         }
 
-        $data['umkm'] = $builder->findAll();
-        $data['kategori'] = $kategoriModel->findAll();
+        $data = [
+            'umkm' => $builder->findAll(),
+            'kategori' => $kategoriModel->findAll(),
+            'search' => $search,
+            'filterKategori' => $filterKategori,
+            'filterRw' => $filterRw
+        ];
 
         return view('admin/kelolaumkm', $data);
     }
-
 
 
 }

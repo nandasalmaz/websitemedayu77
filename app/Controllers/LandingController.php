@@ -47,6 +47,7 @@ class LandingController extends BaseController
             $builder->where('umkm.rw', $rw);
         }
 
+        $builder->groupBy('umkm.id');
         $umkm = $builder->findAll();
 
         return view('umkm', [
@@ -55,6 +56,23 @@ class LandingController extends BaseController
             'rw_list' => $rw_list,
         ]);
     }
+    public function detail_umkm($id)
+    {
+        $model = new \App\Models\UmkmModel();
+
+        // Join dengan kategori
+        $umkm = $model
+            ->select('umkm.*, kategori_usaha.nama_kategori')
+            ->join('kategori_usaha', 'kategori_usaha.id = umkm.kategori_id', 'left')
+            ->find($id);
+
+        if (!$umkm) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("UMKM tidak ditemukan.");
+        }
+
+        return view('detailumkm', ['umkm' => $umkm]);
+    }
+
 
 
 }
